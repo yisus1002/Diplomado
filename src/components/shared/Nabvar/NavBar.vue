@@ -16,7 +16,7 @@ export default {
   data(){
     return{
       items: [
-                  { title: 'Home', icon: 'fa-solid fa-house', to:'/Home' },
+                  { title: 'Dashboard ', icon: 'fa-solid fa-house', to:'/Home' },
                   { title: 'Hotel', icon: 'fa-solid fa-hotel', to:'/hotel' },
                   ],
     }
