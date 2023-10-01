@@ -110,3 +110,46 @@
     mr-2
     mb-6
 }
+
+.table_detail {
+    @apply
+    relative
+    overflow-x-auto
+    shadow-md 
+    sm:rounded-lg
+}
+
+.table_detail table {
+    @apply
+    w-full 
+    text-sm 
+    text-left 
+    text-gray-500 
+    dark:text-gray-400
+}
+
+.table_detail thead {
+    @apply
+    text-xs 
+    text-gray-700 
+    uppercase 
+    bg-gray-50 
+    dark:bg-gray-700 
+    dark:text-gray-400
+}
+
+.button_edit {
+    @apply
+    font-medium 
+    text-blue-600 
+    dark:text-blue-500 
+    hover:underline
+}
+
+.button_remove {
+    @apply 
+    font-medium 
+    text-red-600 
+    dark:text-red-500 
+    hover:underline
+}
