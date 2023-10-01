@@ -1,11 +1,13 @@
 <template>
-  <div>
+  <div class="mt-4">
     <!-- <h2>Detalles del hotel {{ id }}</h2> -->
     <!-- Resto de la presentación de los detalles del hotel -->
 
-    <button type="button" class="button_back" @click="goBack">Regresar</button>
+    <h1 class="Hotel__home__title">Hotel {{ id }}</h1>
     <hr class="mb-6 bg-gray-400 h-1" />
-    <form>
+    <button type="button" class="button_back" @click="goBack"><i class="fa-solid fa-arrow-left"></i> Regresar</button>
+    <div class="container_form">
+      <form>
       <div class="grid gap-6 mb-6 md:grid-cols-2">
         <div>
           <label for="city" class="label_form">Ciudad</label>
@@ -32,6 +34,7 @@
       </div>
       <button type="submit" class="button_form">Guardar</button>
     </form>
+    </div>
   </div>
 </template>
   
@@ -57,3 +60,11 @@ export default {
   }
 };
 </script>
+<style scoped>
+.container_form{ 
+  backdrop-filter: blur(3px);
+  @apply p-4
+  
+  rounded-md
+}
+</style>

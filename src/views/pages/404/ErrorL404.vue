@@ -2,7 +2,7 @@
 <div class="E404 " >
     <div  class="cardCont">
     <h5 class="title">404 - Page Not Found</h5>
-    <router-link class="btn_volver" to="/Home"><i class="fa-solid fa-arrow-left"></i> Volver al inicio </router-link>
+    <router-link class="btn_volver" to="/home"><i class="fa-solid fa-arrow-left"></i> Volver al inicio </router-link>
     <img class="img404" src="@/assets/images/404/E404.jpg" alt="image description">
 
 </div>
