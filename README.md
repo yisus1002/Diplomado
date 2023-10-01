@@ -1,5 +1,10 @@
 # diplomado
+# Integrantes
 
+- Jesus David Garcia Hernandez
+- Roberto Carlos Berrocal Rodriguez
+- Rafael Andres Espinosa Cuadro
+- Jesus Manuel Lagares Talaigua
 ## Project setup
 ```
 npm install

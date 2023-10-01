@@ -1,0 +1,54 @@
+/* Este es un ejemplo para clases globales que desen personalizar */
+
+.Hamburger{
+    @apply inline-flex 
+    items-center 
+    p-2 mt-2 ml-3 
+    text-sm 
+    text-gray-500 
+    rounded-lg 
+    sm:hidden 
+    hover:bg-gray-100 
+    focus:outline-none 
+    focus:ring-2 
+    focus:ring-gray-200 
+    dark:text-gray-400 
+    dark:hover:bg-gray-700 
+    dark:focus:ring-gray-600;
+}
+.aside__content{
+    @apply fixed 
+    top-0
+    left-0 
+    z-40
+    w-64 
+    h-screen 
+    transition-transform
+    -translate-x-full
+    sm:translate-x-0
+}
+.aside__content__menu{
+    @apply h-full
+    px-3
+    py-4
+    overflow-y-auto
+    bg-gray-50 
+    dark:bg-gray-800
+}
+.aside__item{
+    @apply 
+    flex
+    items-center 
+    p-2 
+  text-gray-900 
+    rounded-lg 
+  dark:text-white 
+  hover:bg-gray-100 
+  dark:hover:bg-gray-700 
+}
+
+.activated{
+    @apply bg-gray-100
+    text-gray-900 
+    hover:bg-gray-200
+}
