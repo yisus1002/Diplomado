@@ -17,17 +17,19 @@
     dark:focus:ring-gray-600;
 }
 .aside__content{
-    @apply fixed 
+    padding: 2px;
+    @apply fixed
     top-0
     left-0 
     z-40
     w-64 
     h-screen 
     transition-transform
-    -translate-x-full
     sm:translate-x-0
 }
 .aside__content__menu{
+    
+    border-radius: 20px;
     @apply h-full
     px-3
     py-4
@@ -51,6 +53,9 @@
     @apply bg-gray-100
     text-gray-900 
     hover:bg-gray-200
+}
+@media (max-width: 768px) {
+
 }
 
 
@@ -80,18 +85,27 @@
 .button_form {
     @apply
     text-white
-    bg-gray-700 
-    hover:bg-gray-500 
+    bg-gradient-to-r 
+    from-green-400 
+    via-green-500 
+    to-green-600 
+    hover:bg-gradient-to-br 
     focus:ring-4 
     focus:outline-none 
-    focus:ring-blue-300 
-    font-medium rounded-lg 
+    focus:ring-green-300 
+    dark:focus:ring-green-800 
+    shadow-lg 
+    shadow-green-500/50 
+    dark:shadow-lg 
+    dark:shadow-green-800/80 
+    font-medium 
+    rounded-lg 
     text-sm 
-    w-full 
-    sm:w-auto 
     px-5 
     py-2.5 
     text-center 
+    mr-2 
+    mb-2
 }
 
 .button_back {
@@ -152,4 +166,9 @@
     text-red-600 
     dark:text-red-500 
     hover:underline
+}
+.Hotel__home__title{
+    @apply text-2xl
+    text-green-500
+    font-bold 
 }

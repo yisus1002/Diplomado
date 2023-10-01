@@ -1,5 +1,6 @@
 <template lang="">
-    <div>
+    <div class="Hotel__home">
+        <h1 class="Hotel__home__title">Hoteles</h1>
         <div class="flex justify-end">
             <button class="button_back" @click="createHotel">Crear Hotel</button>
         </div>
@@ -112,6 +113,12 @@ export default {
     }
 }
 </script>
-<style lang="">
+<style lang="css" scoped>
+.Hotel__home{
+    
+    @apply mt-4
+
+}
+
     
 </style>
