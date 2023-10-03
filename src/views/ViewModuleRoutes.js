@@ -1,5 +1,6 @@
-import HotelesModuleRoutes from '../views/pages/hoteles/HotelesModuleRoutes.js' // 
 import LandingModuleRoutes from '../views/pages/landing/LandingModuleRoutes' // 
+import HotelesModuleRoutes from '../views/pages/hoteles/HotelesModuleRoutes.js' // 
+import HabitacionModuleRoutes from '../views/pages/habitaciones/HabitacionesModuleRouter' // 
 const ViewModuleRoutes = [
   {
     path: '/', // Ruta principal 
@@ -14,6 +15,11 @@ const ViewModuleRoutes = [
         path: 'hotel', // Ruta hija, por ejemplo, /hotel
         component: () => import('./pages/hoteles/HotelesView.vue'), // Componente de la página de hoteles
         children: [...HotelesModuleRoutes],
+      },
+      {
+        path: 'habitacion', 
+        component: () => import('./pages/habitaciones/HabitacionView.vue'), // Componente de la página de hoteles
+        children: [...HabitacionModuleRoutes],
       },
     ],
   },
