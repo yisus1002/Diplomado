@@ -1,7 +1,7 @@
 <template lang="">
   <div class="landingContainer">
     <h1 class="head__title Hotel__home__title">Admin / Dashboard</h1>
-    <div class="flex justify-center">
+    <div class="container_chart container_form">
       <div>
         <Doughnut :data="chartDataHabitacionesByType" :options="chartOptions" />
       </div>
@@ -76,5 +76,11 @@ export default {
   background-color: rgb(181, 181, 181);
   @apply text-white
         p-3;
+}
+.container_chart{
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  
 }
 </style>

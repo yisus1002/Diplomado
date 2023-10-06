@@ -4,7 +4,7 @@
   <div class="max-w-screen-xl flex flex-wrap items-center justify-between mx-auto p-4 ">
 
   <div class="flex items-center  order-1">
-      <button type="button" class="user__button" id="user-menu-button" aria-expanded="false" data-dropdown-toggle="user-dropdown" data-dropdown-placement="bottom">
+      <button type="button" class="user__button" id="user-menu-button" >
         <i class="fa-solid fa-user-tie"></i>
       </button>
   </div>

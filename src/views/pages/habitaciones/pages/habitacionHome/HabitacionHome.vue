@@ -109,15 +109,7 @@ export default {
 </script>
 <style scoped>
     .Habitacion__home{
-    
-    @apply mt-4
+        @apply mt-4
+    }
 
-}
-.alert{
-    padding: 30px;
-    text-align: center;
-    border-radius: 30px;
-    background: white;
-
-}
 </style>

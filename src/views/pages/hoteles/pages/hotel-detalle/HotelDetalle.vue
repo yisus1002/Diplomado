@@ -41,7 +41,11 @@
 <script>
 export default {
   props: ['id'], // Recibe el valor de id como una propiedad
-
+  data(){
+    return {
+      
+    }
+  },
   mounted() {
     // Imprimir el valor de id en la consola
     console.log('ID del hotel:', this.id);
@@ -61,10 +65,5 @@ export default {
 };
 </script>
 <style scoped>
-.container_form{ 
-  backdrop-filter: blur(3px);
-  @apply p-4
-  
-  rounded-md
-}
+
 </style>
