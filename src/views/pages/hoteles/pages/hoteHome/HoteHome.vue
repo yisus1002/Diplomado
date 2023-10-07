@@ -29,8 +29,8 @@
                 <td class="px-6 py-4">{{hotel?.Direccion}}</td>
                 <td class="px-6 py-4">{{hotel?.Habitaciones.length}}</td>
                 <td class="flex items-center px-6 py-4 space-x-3">
-                    <button class="button_edit" @click="editHotel(hotel?.NIT)">Edit</button>
-                    <button class="button_remove" @click="confirmRemoveHotel(hotel?.NIT, index)">Remove</button>
+                    <button class="button_edit" @click="editHotel(hotel?.NIT)"><i class="fa-solid fa-pencil"></i></button>
+                    <button class="button_remove" @click="confirmRemoveHotel(hotel?.NIT, index)"><i class="fa-solid fa-trash-can"></i></button>
                 </td>
             </tr>
         </tbody>
@@ -143,11 +143,7 @@ export default {
 }
 </script>
 <style lang="css" scoped>
-.Hotel__home{
-    
-    @apply mt-4
 
-}
 
     
 </style>

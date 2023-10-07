@@ -25,8 +25,8 @@
                 <td class="px-6 py-4">{{Habitacion?.Tipo}}</td>
                 <td class="px-6 py-4">{{Habitacion?.Acomodacion}}</td>
                 <td class="flex items-center px-6 py-4 space-x-3">
-                    <button class="button_edit" @click="editHabitacion(Habitacion?.Codigo, index)">Edit</button>
-                    <button class="button_remove" @click="confirmRemoveHabitacion(Habitacion?.Codigo, index)">Remove</button>
+                    <button class="button_edit" @click="editHabitacion(Habitacion?.Codigo, index)"><i class="fa-solid fa-pencil"></i></button>
+                    <button class="button_remove" @click="confirmRemoveHabitacion(Habitacion?.Codigo, index)"><i class="fa-solid fa-trash-can"></i></button>
                 </td>
             </tr>
         </tbody>

@@ -17,7 +17,7 @@
     dark:focus:ring-gray-600;
 }
 .aside__content{
-    padding: 2px;
+    /* padding: 2px; */
     @apply fixed
     top-0
     left-0 
@@ -29,7 +29,7 @@
 }
 .aside__content__menu{
     
-    border-radius: 20px;
+    /* border-radius: 20px; */
     @apply h-full
     px-3
     py-4
@@ -60,12 +60,14 @@
 
 
 .label_form {
+    letter-spacing: 4px;
     @apply 
     block 
     mb-2
     text-sm
     font-medium 
-    text-gray-900
+    text-white
+
 }
   
 .input_form {
@@ -168,9 +170,16 @@
     hover:underline
 }
 .Hotel__home__title{
+    letter-spacing: 2px;
+    text-shadow: -4px 2px 20px red;
     @apply text-2xl
     text-green-500
     font-bold 
+}
+.Hotel__home{
+    
+    @apply p-4
+
 }
 .alert{
     padding: 30px;
@@ -180,7 +189,7 @@
 
 }
 .container_form{ 
-    backdrop-filter: blur(3px);
+    backdrop-filter: blur(20px);
     @apply p-4
     
     rounded-md

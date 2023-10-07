@@ -1,6 +1,6 @@
 <template lang="">
   <div>
-    <div class="mt-4">
+    <div class="Hotel__home">
       <h1 class="Hotel__home__title">Habitacion {{ id }}</h1>
       <hr class="mb-6 bg-gray-400 h-1" />
       <button type="button" class="button_back" @click="goBack">
@@ -41,7 +41,7 @@
             <div>
               <label for="type" class="label_form">Hotel</label>
               <select id="type" class="input_form">
-                <option selected>Tipo de acomodación</option>
+                <option selected>Seleccione el hotel</option>
                 <option value="123">Silver</option>
                 <option value="4321">Costa de oro</option>
               </select>

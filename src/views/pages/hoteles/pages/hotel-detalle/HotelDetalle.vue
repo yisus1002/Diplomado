@@ -1,5 +1,5 @@
 <template>
-  <div class="mt-4">
+  <div class="Hotel__home">
     <!-- <h2>Detalles del hotel {{ id }}</h2> -->
     <!-- Resto de la presentación de los detalles del hotel -->
 

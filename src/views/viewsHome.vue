@@ -10,7 +10,10 @@
 
 <div class=" sm:ml-64">
    <NavBarMenu @HMenu="toogle"></NavBarMenu>
-    <router-view/>
+   <div class="">
+      <router-view/>
+      
+   </div>
 </div>
 </template>
 <script>

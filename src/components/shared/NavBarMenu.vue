@@ -1,13 +1,32 @@
 <template lang="">
 
-<nav class="bg-white ">
+<nav class="dark:bg-gray-800 dark:divide-gray-800">
   <div class="max-w-screen-xl flex flex-wrap items-center justify-between mx-auto p-4 ">
 
   <div class="flex items-center  order-1">
-      <button type="button" class="user__button" id="user-menu-button" >
+      <button id="dropdownDividerButton" type="button" class="user__button"  data-dropdown-toggle="dropdownDivider">
         <i class="fa-solid fa-user-tie"></i>
       </button>
   </div>
+
+
+<!-- Dropdown menu -->
+<div id="dropdownDivider" class="z-10 hidden bg-white divide-y divide-gray-100 rounded-lg shadow w-44 dark:bg-gray-800 dark:divide-gray-600">
+    <ul class="py-2 text-sm text-gray-700 dark:text-gray-200" aria-labelledby="dropdownDividerButton">
+
+      <li>
+        <a href="#" class="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white">Ajustes</a>
+      </li>
+      <li>
+        <a href="#" class="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white">Perfil</a>
+      </li>
+    </ul>
+    <div class="py-2">
+      <a href="#" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 dark:hover:bg-gray-600 dark:text-gray-200 dark:hover:text-white">Salir</a>
+    </div>
+</div>
+
+
   <div class=""> 
     <button @click="toogleHMenu" type="button" class="Hamburger">
    <span class="sr-only">Open sidebar</span>

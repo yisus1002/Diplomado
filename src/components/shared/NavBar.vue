@@ -1,5 +1,9 @@
 <template >
-      <ul class="space-y-2 font-medium color">
+<div class="">
+  <div class="cont">
+    <img src="../../assets/icons/logo.png" class="cont_logo" alt="Logo">
+  </div>
+  <ul class="space-y-2 font-medium color">
          <li v-for="(menu, index) in items" :key="index">
             <router-link
             @click="toogleH"
@@ -9,6 +13,7 @@
             </router-link>
          </li>
       </ul>
+</div>
 </template>
 <script>
 export default {
@@ -30,6 +35,17 @@ export default {
   
 }
 </script>
-<style lang="">
-  
+<style scoped>
+  .cont{
+    /* border: solid red 1px; */
+    height: 50px;
+    margin-bottom:10px ;
+  }
+  .cont_logo{
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    user-select: none;
+    border-radius: 10px;
+  }
 </style>
