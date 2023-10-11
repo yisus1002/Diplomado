@@ -169,6 +169,9 @@
     dark:text-red-500 
     hover:underline
 }
+.button_saved{
+    @apply text-white
+}
 .Hotel__home__title{
     letter-spacing: 2px;
     text-shadow: -4px 2px 20px red;

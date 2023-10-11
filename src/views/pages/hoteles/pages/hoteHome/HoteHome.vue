@@ -4,7 +4,7 @@
         <div class="flex justify-end">
             <button class="button_back" @click="createHotel">Crear Hotel</button>
         </div>
-<template v-if="HotelJson.length>0">
+<template v-if="HotelJson?.length>0">
     <div class="table_detail">
             <table>
         <thead class="">
@@ -22,15 +22,15 @@
             v-for="(hotel, index) in HotelJson" :key="index"            
             class="bg-white border-b dark:bg-gray-800 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600">
                 <th scope="row" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
-                    {{hotel?.Ciudad}}
+                    {{hotel?.ciudad}}
                 </th>
-                <td class="px-6 py-4">{{hotel?.Hotel}}</td>
-                <td class="px-6 py-4">{{hotel?.NIT}}</td>
-                <td class="px-6 py-4">{{hotel?.Direccion}}</td>
-                <td class="px-6 py-4">{{hotel?.Habitaciones.length}}</td>
+                <td class="px-6 py-4">{{hotel?.hotel}}</td>
+                <td class="px-6 py-4">{{hotel?.nit}}</td>
+                <td class="px-6 py-4">{{hotel?.direccion}}</td>
+                <td class="px-6 py-4">{{hotel?.habitaciontotal}}</td>
                 <td class="flex items-center px-6 py-4 space-x-3">
-                    <button class="button_edit" @click="editHotel(hotel?.NIT)"><i class="fa-solid fa-pencil"></i></button>
-                    <button class="button_remove" @click="confirmRemoveHotel(hotel?.NIT, index)"><i class="fa-solid fa-trash-can"></i></button>
+                    <button class="button_edit" @click="editHotel(hotel?.id)"><i class="fa-solid fa-pencil"></i></button>
+                    <button class="button_remove" @click="confirmRemoveHotel(hotel?.id,)"><i class="fa-solid fa-trash-can"></i></button>
                 </td>
             </tr>
         </tbody>
@@ -45,72 +45,20 @@
 
     </div>
 </template>
+
 <script>
+import HotelService from '@/services/HotelService';
 import Swal from 'sweetalert2';
 import { mapMutations } from 'vuex';
 export default {
     name:"HotelHome",
     data(){
     return {
-        HotelJson:[
-            {
-                Ciudad:"Monteria",
-                Hotel:"Miami Center",
-                NIT:12083231,
-                Direccion:"Cra 5A 23-59",
-                Habitaciones:[
-                {
-                    Codigo:"123",
-                    Tipo:"Estándar",
-                    Acomodacion:"Sencilla",
-                },
-                {
-                    Codigo:"124",
-                    Tipo:"Junior",
-                    Acomodacion:"Doble",
-                },
-                {
-                    Codigo:"125",
-                    Tipo:"Estándar",
-                    Acomodacion:"Cuádruple",
-                },
-                {
-                    Codigo:"126",
-                    Tipo:"Suite",
-                    Acomodacion:"Triple",
-                }, 
-                ],
-            },
-            {
-                Ciudad:"Medellin",
-                Hotel:"Hong Kong",
-                NIT:12983231,
-                Direccion:"Cra 5A 23-59",
-                Habitaciones:[
-                {
-                    Codigo:"123",
-                    Tipo:"Estándar",
-                    Acomodacion:"Sencilla",
-                },
-                {
-                    Codigo:"124",
-                    Tipo:"Junior",
-                    Acomodacion:"Doble",
-                },
-                {
-                    Codigo:"125",
-                    Tipo:"Estándar",
-                    Acomodacion:"Cuádruple",
-                },
-                {
-                    Codigo:"126",
-                    Tipo:"Suite",
-                    Acomodacion:"Triple",
-                }, 
-                ],
-            },
-        ]
+        HotelJson:[]
     }
+  },
+  created(){
+    this.getHotel();
   },
     methods: {
         ...mapMutations(['alert']),
@@ -120,7 +68,7 @@ export default {
         editHotel(id) {
             this.$router.push(`/hotel/${id}`);
         },
-        confirmRemoveHotel(id, index) {
+        confirmRemoveHotel(id) {
             Swal.fire({
                 title: 'Confirmar eliminación',
                 text: '¿Estas seguro de eliminar este hotel?',
@@ -130,20 +78,29 @@ export default {
                 cancelButtonText: 'Cancelar'
             }).then((result) => {
                 if (result.isConfirmed) {
-                    this.removeHotel(id, index);
+                    this.deletedHotel(id);
                 }
             });
         },
-        removeHotel(id) {
-            this.alert(`Se a eliminado el hotel ${id}`);
-            this.HotelJson= this.HotelJson.filter((ele)=>ele.NIT!==id);
-            console.log(id);
+        getHotel(){
+            HotelService.gethotel()
+            .then(response=>{
+                this.HotelJson=response
+            })
+            .catch(error=>{
+               this.alert({mensage:error,icon:'error'})
+            })
+        },
+        deletedHotel(id){
+            HotelService.deletehotel(id)
+            .then(()=>{
+                this.alert({mensage:`Se a eliminado el hotel ${id}`,icon:'success'});
+                this.HotelJson= this.HotelJson.filter((ele)=>ele.id!==id);
+            }).catch(error=>{
+                this.alert({mensage:error,icon:'error'})
+            })
         }
     }
 }
 </script>
-<style lang="css" scoped>
-
-
-    
-</style>
+<style scoped></style>

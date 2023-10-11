@@ -4,11 +4,12 @@ import Swal from 'sweetalert2'
 
 export default createStore({
   state: {
+    apiBaseURL: 'https://6526f588917d673fd76d462f.mockapi.io/'
   },
   getters: {
   },
   mutations: {
-    alert:( state,mensage)=>{
+    alert:( state,{mensage, icon})=>{
       console.log(mensage);
       const Toast = Swal.mixin({
         toast: true,
@@ -22,7 +23,7 @@ export default createStore({
         }
       })
       Toast.fire({
-        icon: 'success',
+        icon: icon,
         title: mensage
       })
     }
