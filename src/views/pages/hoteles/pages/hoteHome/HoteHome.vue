@@ -29,6 +29,7 @@
                 <td class="px-6 py-4">{{hotel?.direccion}}</td>
                 <td class="px-6 py-4">{{hotel?.habitaciontotal}}</td>
                 <td class="flex items-center px-6 py-4 space-x-3">
+                    <button class="button_info" @click="info(hotel?.id)"><i class="fa-solid fa-eye"></i></button>
                     <button class="button_edit" @click="editHotel(hotel?.id)"><i class="fa-solid fa-pencil"></i></button>
                     <button class="button_remove" @click="confirmRemoveHotel(hotel?.id,)"><i class="fa-solid fa-trash-can"></i></button>
                 </td>
@@ -67,6 +68,9 @@ export default {
         },
         editHotel(id) {
             this.$router.push(`/hotel/${id}`);
+        },
+        info(id) {
+            this.$router.push(`/hotel-info/${id}`);
         },
         confirmRemoveHotel(id) {
             Swal.fire({

@@ -153,7 +153,13 @@
     dark:bg-gray-700 
     dark:text-gray-400
 }
-
+.button_info{
+    @apply
+    font-medium 
+    text-green-600 
+    dark:text-green-500 
+    hover:underline 
+}
 .button_edit {
     @apply
     font-medium 

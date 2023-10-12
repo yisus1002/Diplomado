@@ -25,7 +25,8 @@
                 <td class="px-6 py-4">{{Habitacion?.Tipo}}</td>
                 <td class="px-6 py-4">{{Habitacion?.Acomodacion}}</td>
                 <td class="flex items-center px-6 py-4 space-x-3">
-                    <button class="button_edit" @click="editHabitacion(Habitacion?.Codigo, index)"><i class="fa-solid fa-pencil"></i></button>
+                    <button class="button_info" @click="info(Habitacion?.Codigo)"><i class="fa-solid fa-eye"></i></button>
+                    <button class="button_edit" @click="editHabitacion(Habitacion?.Codigo)"><i class="fa-solid fa-pencil"></i></button>
                     <button class="button_remove" @click="confirmRemoveHabitacion(Habitacion?.Codigo, index)"><i class="fa-solid fa-trash-can"></i></button>
                 </td>
             </tr>
@@ -84,6 +85,9 @@ export default {
         },
         editHabitacion(id) {
             this.$router.push(`/habitacion/${id}`);
+        },
+        info(id){
+            this.$router.push(`/habitacion-info/${id}`);
         },
         confirmRemoveHabitacion(id, index) {
 
