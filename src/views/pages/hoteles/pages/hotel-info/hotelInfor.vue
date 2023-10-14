@@ -6,16 +6,16 @@
         
         <div class="container_detalle"> 
             <div class="flex items-center justify-center p-3">
-                    <img src="https://loremflickr.com/cache/resized/65535_52546335077_3169299263_c_640_480_nofilter.jpg" class="rounded-xl max-w-60  mx-auto">
+                    <img :src="Detalle_hotel.img"  class="rounded-xl max-w-60  mx-auto">
                 </div>
             <div class="container_form">
                 <div class="grid gap-6 mb-6 md:grid-cols-1">
                         <h1 class="detaller_form">{{ Detalle_hotel.hotel }}</h1>
                     <div class="grip  gap-6 mb-6 md:grid-cols-2">
-                            <P class="detalle_h2">Nit: {{ Detalle_hotel.nit }}</P>
-                            <P class="detalle_h2">Ciudad: {{ Detalle_hotel.ciudad }}</P>
-                            <P class="detalle_h2">Direccion: {{ Detalle_hotel.direccion }}</P>
-                            <P class="detalle_h2">Habitaciones: {{ Detalle_hotel.habitaciontotal }}</P>
+                            <p class="detalle_h2">Nit: {{ Detalle_hotel.nit }}</p>
+                            <p class="detalle_h2">Ciudad: {{ Detalle_hotel.ciudad }}</p>
+                            <p class="detalle_h2">Direccion: {{ Detalle_hotel.direccion }}</p>
+                            <p class="detalle_h2">Habitaciones: {{ Detalle_hotel.habitaciontotal }}</p>
                     </div>
                 </div>
                 
@@ -33,11 +33,11 @@ import { mapMutations } from 'vuex';
 export default {
     props: ['id'],
     data(){
-    return {
-        HotelJson:{},
-        Detalle_hotel:{}
-    }
-  },
+        return {
+            HotelJson:{},
+            Detalle_hotel:{}
+        }
+    },
 
     methods: {
         ...mapMutations(['alert']),
@@ -51,6 +51,7 @@ export default {
                 nit:hotel.nit,
                 direccion:hotel.direccion,
                 habitaciontotal:hotel.habitaciontotal,
+                img:hotel.img
             }
         },
         getHotelByID(id){
@@ -62,6 +63,7 @@ export default {
             })
             .catch(error => {
                 console.log(error);
+                this.alert({mensage:error,icon:'error'});
             });
         },
     },
@@ -69,7 +71,9 @@ export default {
         this.getHotelByID(this.id);
     },
 };
+
 </script>
+
 <style scoped>
 
 </style>
