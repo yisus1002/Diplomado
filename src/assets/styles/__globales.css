@@ -54,9 +54,6 @@
     text-gray-900 
     hover:bg-gray-200
 }
-@media (max-width: 768px) {
-
-}
 
 
 .label_form {
@@ -179,12 +176,30 @@
     @apply text-white
 }
 .Hotel__home__title{
+
     letter-spacing: 2px;
-    text-shadow: -4px 2px 20px red;
+    /* text-shadow: -4px 2px 20px red; */
     @apply text-2xl
     text-green-500
     font-bold 
+    p-4
 }
+
+.detaller_form{
+    letter-spacing: 2px;
+    /* text-shadow: -4px 2px 20px white; */
+    @apply text-xl
+    /* text-white */
+    font-bold
+}
+.detalle_h2{
+    line-height: 30px!important;
+    border-bottom: 1px solid gray;
+    @apply text-lg
+    text-black
+    font-bold
+}
+ 
 .Hotel__home{
     
     @apply p-4
@@ -198,8 +213,18 @@
 
 }
 .container_form{ 
-    backdrop-filter: blur(20px);
+    width: 100%;
+    /* backdrop-filter: blur(20px); */
     @apply p-4
     
     rounded-md
   }
+.container_detalle{
+    box-shadow: 2px 1px 7px 5px #b6b6b6;
+    background-color: #ffff;
+    /* backdrop-filter: blur(20px); */
+    @apply p-4
+    flex
+    rounded-md
+    mb-4
+}
