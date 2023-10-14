@@ -185,6 +185,22 @@
     text-green-500
     font-bold 
 }
+
+.detaller_form{
+    letter-spacing: 2px;
+    text-shadow: -4px 2px 20px white;
+    @apply text-xl
+    text-white
+    font-bold
+}
+.detalle_h2{
+    letter-spacing: 2px;
+    text-shadow: -4px 2px 20px black;
+    @apply text-lg
+    text-black
+    font-bold
+}
+ 
 .Hotel__home{
     
     @apply p-4
@@ -203,3 +219,9 @@
     
     rounded-md
   }
+.container_detalle{
+    backdrop-filter: blur(20px);
+    @apply p-4
+    flex
+    rounded-md
+}
