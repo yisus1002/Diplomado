@@ -40,7 +40,7 @@
 </template>
 <template v-else>
     <div class="alert shadow">
-        <p class="text-red-500 text-2xl">No hay datos de hoteles</p>
+        <p class="text-red-500 text-2xl">No hay datos de hoteles en la lista</p>
     </div>
 </template>
 
