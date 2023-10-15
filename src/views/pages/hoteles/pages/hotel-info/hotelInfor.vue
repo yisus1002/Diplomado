@@ -169,13 +169,22 @@ export default {
           const { sencilla, doble, triple, cuadruple } =
             countHabitacionesByAcomodacion;
           this.chartDataHabitacionesByType = dataConfig(
-            ['ESTANDAR', 'JUNIOR', 'SUITE'],
+            [
+              this.habitacionType.estandar,
+              this.habitacionType.junior,
+              this.habitacionType.suite,
+            ],
             ['#41B883', '#00D8FF', '#DD1B16'],
             [estandar, junior, suite]
           );
 
           this.chartDataHabitacionesByAcomodacion = dataConfig(
-            ['SENCILLA', 'DOBLE', 'TRIPLE', 'CUADRUPLE'],
+            [
+              this.habitacionAcomodacion.sencilla,
+              this.habitacionAcomodacion.doble,
+              this.habitacionAcomodacion.triple,
+              this.habitacionAcomodacion.cuadruple,
+            ],
             ['#41B883', '#00D8FF', '#DD1B16', '#f87979'],
             [sencilla, doble, triple, cuadruple],
             'Acomodación'
