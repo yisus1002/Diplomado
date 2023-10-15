@@ -73,13 +73,13 @@ export default {
   props: ['id'],
   data() {
     return {
-      TipoHabitacion: ['Seleccione', 'Estandar', 'Junior', 'Suite'],
+      TipoHabitacion: ['Seleccione', 'ESTANDAR', 'JUNIOR', 'SUITE'],
       TipoAcomodacion: [
         'Seleccione',
-        'Sencilla',
-        'Doble',
-        'Triple',
-        'Cuádruple',
+        'SENCILLA',
+        'DOBLE',
+        'TRIPLE',
+        'CUADRUPLE',
       ],
       HabitacionJson: [],
       FormuHabitacion: {},
@@ -129,6 +129,9 @@ export default {
         .catch((error) => {
           console.log(error);
         });
+    },
+    send() {
+      this.putHabitacion(this.HabitacionJson.id, this.FormuHabitacion);
     },
   },
 };
