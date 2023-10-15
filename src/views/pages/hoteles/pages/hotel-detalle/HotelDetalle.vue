@@ -98,8 +98,14 @@ export default {
   props: ['id'], 
   data(){
     return {
-      TipoHabitacion: ['Seleccione','Estandar', 'Junior', 'Suite'],
-      TipoAcomodacion:['Seleccione','Sencilla', 'Doble', 'Triple', 'Cuádruple'],
+      TipoHabitacion: ['Seleccione', 'ESTANDAR', 'JUNIOR', 'SUITE'],
+      TipoAcomodacion: [
+        'Seleccione',
+        'SENCILLA',
+        'DOBLE',
+        'TRIPLE',
+        'CUADRUPLE',
+      ],
       HotelJson:{},
       habitacionJson:[],
       FormuHotel:{}
