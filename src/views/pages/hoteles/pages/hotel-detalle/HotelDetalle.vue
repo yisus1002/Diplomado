@@ -1,7 +1,7 @@
 <template>
   <div class="Hotel__home">
 
-    <h1 class="Hotel__home__title">Hotel {{ id }}</h1>
+    <h1 class="Hotel__home__title ">Hotel {{ id }}</h1>
     <hr class="mb-6 bg-gray-400 h-1" />
     <button type="button" class="button_back" @click="goBack"><i class="fa-solid fa-arrow-left"></i> Regresar</button>
     <div class="container_form">
@@ -88,6 +88,7 @@
     </div>
 </div>
     </div>
+
   </div>
 </template>
   
@@ -98,14 +99,8 @@ export default {
   props: ['id'], 
   data(){
     return {
-      TipoHabitacion: ['Seleccione', 'ESTANDAR', 'JUNIOR', 'SUITE'],
-      TipoAcomodacion: [
-        'Seleccione',
-        'SENCILLA',
-        'DOBLE',
-        'TRIPLE',
-        'CUADRUPLE',
-      ],
+      TipoHabitacion: ['Seleccione','Estandar', 'Junior', 'Suite'],
+      TipoAcomodacion:['Seleccione','Sencilla', 'Doble', 'Triple', 'Cuádruple'],
       HotelJson:{},
       habitacionJson:[],
       FormuHotel:{}

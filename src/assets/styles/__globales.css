@@ -178,11 +178,14 @@
 .Hotel__home__title{
 
     letter-spacing: 2px;
+    
     /* text-shadow: -4px 2px 20px red; */
     @apply text-2xl
+    
     text-green-500
     font-bold 
     p-4
+   
 }
 
 .detaller_form{
@@ -214,7 +217,7 @@
 }
 .container_form{ 
     width: 100%;
-    /* backdrop-filter: blur(20px); */
+    backdrop-filter: blur(20px);
     @apply p-4
     
     rounded-md
