@@ -4,30 +4,30 @@ const apiBaseURL = store.state.apiBaseURL;
 
 export default {
   getHabitacion() {
-    return axios.get(`${apiBaseURL}/habitacion`).then((response) => response.data);
+    return axios.get(`${apiBaseURL}/rooms`).then((response) => response.data);
   },
 
   getHabitacionId(id) {
     return axios
-      .get(`${apiBaseURL}/habitacion/${id}`)
+      .get(`${apiBaseURL}/rooms/${id}`)
       .then((response) => response.data);
   },
 
   postHabitacion(habitacion) {
     return axios
-      .post(`${apiBaseURL}/habitacion`, habitacion)
+      .post(`${apiBaseURL}/rooms`, habitacion)
       .then((response) => response.data);
   },
 
   putHabitacion(id, habitacion) {
     return axios
-      .put(`${apiBaseURL}/habitacion/${id}`, habitacion)
+      .put(`${apiBaseURL}/rooms/${id}`, habitacion)
       .then((response) => response.data);
   },
 
   deleteHabitacion(id) {
     return axios
-      .delete(`${apiBaseURL}/habitacion/${id}`)
+      .delete(`${apiBaseURL}/rooms/${id}`)
       .then((response) => response.data);
   },
 };
