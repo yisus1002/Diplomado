@@ -22,12 +22,12 @@
             v-for="(hotel, index) in HotelJson" :key="index"            
             class="bg-white border-b dark:bg-gray-800 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600">
                 <th scope="row" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
-                    {{hotel?.ciudad}}
+                    {{hotel?.city?.name}}
                 </th>
-                <td class="px-6 py-4">{{hotel?.hotel}}</td>
+                <td class="px-6 py-4">{{hotel?.name}}</td>
                 <td class="px-6 py-4">{{hotel?.nit}}</td>
-                <td class="px-6 py-4">{{hotel?.direccion}}</td>
-                <td class="px-6 py-4">{{hotel?.habitaciontotal}}</td>
+                <td class="px-6 py-4">{{hotel?.address}}</td>
+                <td class="px-6 py-4">{{hotel?.num_rooms}}</td>
                 <td class="flex items-center px-6 py-4 space-x-3">
                     <button class="button_info" @click="info(hotel?.id)"><i class="fa-solid fa-eye"></i></button>
                     <button class="button_edit" @click="editHotel(hotel?.id)"><i class="fa-solid fa-pencil"></i></button>
@@ -89,7 +89,8 @@ export default {
         getHotel(){
             HotelService.gethotel()
             .then(response=>{
-                this.HotelJson=response
+                console.log(response)
+                this.HotelJson=response?.data
             })
             .catch(error=>{
                this.alert({mensage:error,icon:'error'})

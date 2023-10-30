@@ -5,7 +5,7 @@
     <button type="button" class="button_back" @click="goBack">
       <i class="fa-solid fa-arrow-left"></i> Regresar
     </button>
-    <div class="container_chart container_form">
+    <!-- <div class="container_chart container_form">
       <div>
         <Doughnut :data="chartDataHabitacionesByType" :options="chartOptions" />
       </div>
@@ -15,20 +15,20 @@
           :options="chartOptions"
         />
       </div>
-    </div>
+    </div> -->
     <div class="container_detalle">
       <div class="flex items-center justify-center p-3">
-        <img :src="Detalle_hotel.img" class="rounded-xl max-w-60 mx-auto" />
+        <img src="https://loremflickr.com/640/480/city" class="rounded-xl max-w-60 mx-auto" />
       </div>
       <div class="container_form">
         <div class="grid gap-6 mb-6 md:grid-cols-1">
-          <h1 class="detaller_form">{{ Detalle_hotel.hotel }}</h1>
+          <h1 class="detaller_form">{{ Detalle_hotel?.name }}</h1>
           <div class="grip gap-6 mb-6 md:grid-cols-2">
-            <p class="detalle_h2">Nit: {{ Detalle_hotel.nit }}</p>
-            <p class="detalle_h2">Ciudad: {{ Detalle_hotel.ciudad }}</p>
-            <p class="detalle_h2">Direccion: {{ Detalle_hotel.direccion }}</p>
+            <p class="detalle_h2">Nit: {{ Detalle_hotel?.nit }}</p>
+            <p class="detalle_h2">Ciudad: {{ Detalle_hotel?.city?.name }}</p>
+            <p class="detalle_h2">Direccion: {{ Detalle_hotel?.address }}</p>
             <p class="detalle_h2">
-              Habitaciones: {{ Detalle_hotel.habitaciontotal }}
+              Habitaciones: {{ Detalle_hotel?.num_rooms }}
             </p>
           </div>
         </div>
@@ -48,7 +48,7 @@ import {
   LinearScale,
   BarElement,
 } from 'chart.js';
-import { Doughnut, Bar } from 'vue-chartjs';
+// import { Doughnut, Bar } from 'vue-chartjs';
 import {
   dataConfig,
   options,
@@ -70,11 +70,11 @@ ChartJS.register(
 export default {
   props: ['id'],
   components: {
-    Doughnut,
-    Bar,
+    // Doughnut,
+    // Bar,
   },
   created() {
-    this.DataHabitaciones();
+    // this.DataHabitaciones();
   },
   data() {
     return {
@@ -102,25 +102,21 @@ export default {
     goBack() {
       this.$router.push('/hotel');
     },
-    loadDetalle(hotel) {
-      this.Detalle_hotel = {
-        hotel: hotel.hotel,
-        ciudad: hotel.ciudad,
-        nit: hotel.nit,
-        direccion: hotel.direccion,
-        habitaciontotal: hotel.habitaciontotal,
-        img: hotel.img,
-      };
-    },
     getHotelByID(id) {
       HotelService.gethotelId(id)
         .then((response) => {
-          this.HotelJson = response;
-          this.loadDetalle(this.HotelJson);
+          if(!response.data){
+            this.goBack();
+            return;
+          }
+          this.Detalle_hotel = response.data;
+          
+          // console.log(response);
         })
         .catch((error) => {
           console.log(error);
           this.alert({ mensage: error, icon: 'error' });
+          this.goBack();
         });
     },
     getCountHabitacionesByHotel() {

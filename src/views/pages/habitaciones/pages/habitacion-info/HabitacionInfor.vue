@@ -11,7 +11,7 @@
                 </div>
             <div class="container_form">
                 <div class="grid gap-6 mb-6 md:grid-cols-1">
-                        <h1 class="detaller_form">Haabitación: {{ Detalle_habitacion.codigo }}</h1>
+                        <h1 class="detaller_form">Habitación: {{ Detalle_habitacion.codigo }}</h1>
                     <div class="grip  gap-6 mb-6 md:grid-cols-2">
                             <p class="detalle_h2">Tipo: {{ Detalle_habitacion.tipo }}</P>
                             <p class="detalle_h2">Acomodación: {{ Detalle_habitacion.acomodacion }}</P>
@@ -33,7 +33,6 @@ export default {
     props:['id'],
     data(){
         return{
-            HotelJson:{},
             Detalle_habitacion:{}
         }
     },
@@ -43,21 +42,11 @@ export default {
         goBack() {
             this.$router.push('/habitacion')
         },
-        loadDetalle(habitacion){
-            this.Detalle_habitacion={
-                codigo:habitacion.codigo,
-                tipo:habitacion.tipo,
-                acomodacion:habitacion.acomodacion,
-                hotel:habitacion.hotel,
-                img:habitacion.img,
-            }
-        },
         getHabitacionID(id){
             HabitacionService.getHabitacionId(id)
             .then(response => {
                 console.log(response);
-                this.HotelJson = response;
-                this.loadDetalle(this.HotelJson)
+                this.Detalle_habitacion = response;
             })
             .catch(error => {
                 console.log(error);
