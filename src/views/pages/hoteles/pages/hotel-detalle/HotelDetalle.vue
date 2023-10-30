@@ -10,11 +10,14 @@
       <div class="grid gap-6 mb-6 md:grid-cols-2">
         <div>
           <label for="city" class="label_form">Ciudad</label>
-          <input v-model="FormuHotel.ciudad" type="text" id="city" class="input_form" placeholder="Ingrese la ciudad" required>
+          <select v-model="FormuHotel.city_id" class="input_form" required>
+            <option v-for="(city, index) in ciudades" :key="index" :value="city.id"  :selected="index === 0" :disabled="index === 0">{{ city.name }}</option>
+          </select>
+          <!-- <input v-model="FormuHotel.city_id" type="text" id="city" class="input_form" placeholder="Ingrese la ciudad" required> -->
         </div>
         <div>
           <label for="name_hotel" class="label_form">Hotel</label>
-          <input v-model="FormuHotel.hotel" type="text" id="name_hotel" class="input_form" placeholder="Ingrese el nombre del hotel" required>
+          <input v-model="FormuHotel.name" type="text" id="name_hotel" class="input_form" placeholder="Ingrese el nombre del hotel" required>
         </div>
         <div>
           <label for="nit" class="label_form">NIT</label>
@@ -22,18 +25,18 @@
         </div>
         <div>
           <label for="address" class="label_form">Dirección</label>
-          <input v-model="FormuHotel.direccion" type="text" id="address" class="input_form" placeholder="Ingrese la dirección" required>
+          <input v-model="FormuHotel.address" type="text" id="address" class="input_form" placeholder="Ingrese la dirección" required>
         </div>
         <div>
           <label for="number_rooms" class="label_form">Habitaciones</label>
-          <input v-model="FormuHotel.habitaciontotal" type="number" min="1" id="number_rooms" class="input_form" placeholder="Ingrese el numero maximo de habitaciones"
+          <input v-model="FormuHotel.num_rooms" type="number" min="1" id="number_rooms" class="input_form" placeholder="Ingrese el numero maximo de habitaciones"
             required>
         </div>
 
       </div>
       <button type="submit" class="button_form">Guardar</button>
     </form>
-<div class="slide-in-top" v-if="HotelJson.habitaciontotal>0">
+<div class="slide-in-top" v-if="HotelJson.num_rooms>0">
   <h1 class="text-center text-2xl title_habitacion">Asignar habitaciones</h1>
     <form class="table_detail">
     <table>
@@ -84,7 +87,7 @@
     </table>
     </form>
     <div class="">
-      <button v-if="HotelJson?.habitaciontotal>habitacionJson.length" type="button" @click="createHabitacion" class="button_form button_crear"><i class="fa-solid fa-plus"></i></button>
+      <button v-if="HotelJson?.num_rooms>habitacionJson.length" type="button" @click="createHabitacion" class="button_form button_crear"><i class="fa-solid fa-plus"></i></button>
     </div>
 </div>
     </div>
@@ -95,6 +98,7 @@
 <script>
 import HotelService from '@/services/HotelService';
 import { mapMutations } from 'vuex';
+import Citys from '@/services/ServicesSelectores';
 export default {
   props: ['id'], 
   data(){
@@ -103,7 +107,8 @@ export default {
       TipoAcomodacion:['Seleccione','Sencilla', 'Doble', 'Triple', 'Cuádruple'],
       HotelJson:{},
       habitacionJson:[],
-      FormuHotel:{}
+      FormuHotel:{},
+      ciudades:[],
     }
   },
   created(){
@@ -111,16 +116,16 @@ export default {
    const id = this.$route.params.id;
 
     if (id !== 'new') {
-      console.log(this.id);
+      // console.log(this.id);
       this.getHotelByID(id);
-    }
-    this.loadFormu({ ciudad:'', hotel:'', nit:'', direccion:'', habitaciontotal:0});
+    }else{
+      this.loadFormu({ city:{id:0,name:'Seleccione'}, name:'', nit:'', address:'', num_rooms:0,});
 
+    }
   },
 
   mounted() {
-
-
+    this.getCitys();
   },
   methods: {
     ...mapMutations(['alert']),
@@ -137,15 +142,16 @@ export default {
 
     },
     saved(habitacion){
-      console.log(habitacion);
+      // console.log(habitacion);
       if(habitacion.codigo==='',habitacion.tipo==='Seleccione',habitacion.acomodacion==='Seleccione'){
         this.alert({mensage:`Tiene campos sin completar`,icon:'warning'});
         return;
       }
-      this.alert({mensage:`Habitaciín creada`,icon:'success'});
+      this.alert({mensage:`Habitación creada`,icon:'success'});
 
     },
     send(){
+      // console.log(this.FormuHotel);
       if(this.HotelJson?.id){
         this.putHotel(this.HotelJson.id, this.FormuHotel);
         return;
@@ -156,7 +162,7 @@ export default {
       this.$refs.FormuHotel.reset();
     },
     createHabitacion(){
-      if(this.HotelJson?.habitaciontotal>this.habitacionJson.length){
+      if(this.HotelJson?.num_rooms>this.habitacionJson.length){
         this.habitacionJson.push({
           codigo:'',
           tipo:'Seleccione',
@@ -166,47 +172,68 @@ export default {
 
     },
     loadFormu(hotel){
+
       this.FormuHotel={
-        ciudad:hotel.ciudad,
-        hotel:hotel.hotel,
-        nit:hotel.nit,
-        direccion:hotel.direccion,
-        habitaciontotal:hotel.habitaciontotal,
+        city_id: hotel.city?.id,
+        name: hotel.name,
+        nit: hotel.nit,
+        address: hotel.address,
+        num_rooms: hotel?.num_rooms
       }
 
+    },
+    getCitys(){
+      Citys.getCityes()
+      .then(response => {
+        this.ciudades = response;
+        this.ciudades.unshift({id:0,name:'Seleccione'});
+                // console.log(response);
+      })
+      .catch(error => {
+                this.alert({mensage:error?.response?.data?.message,icon:'error'});
+        console.log(error?.response?.data?.message);
+      })
     },
     getHotelByID(id){
       HotelService.gethotelId(id)
       .then(response => {
-        console.log(response);
-          this.HotelJson = response;
+        if(!response.data){
+            this.goBack();
+            return;
+          }        
+        this.HotelJson = response.data;
           this.loadFormu(this.HotelJson)
         })
         .catch(error => {
-          console.log(error);
+                  this.alert({mensage:error?.response?.data?.message,icon:'error'});
+        console.log(error?.response?.data?.message);
+        this.goBack();
         })
     },
     postHotel(hotel){
       HotelService.posthotel(hotel)
       .then(response=>{
-        console.log(response);
-        this.HotelJson=response;
+        // console.log(response);
+        this.HotelJson=response.data;
         this.alert({mensage:`Hotel creado`,icon:'success'});
       })
       .catch(error => {
-        console.log(error);
+        this.alert({mensage:error?.response?.data?.message,icon:'error'});
+        console.log(error?.response?.data?.message);
       })
     },
     putHotel(id, hotel){
       HotelService.puthotel(id, hotel)
       .then(response => {
-        console.log(response);
-        this.HotelJson=response;
+        // console.log(response);
+        this.HotelJson=response.data;
         this.alert({mensage:`Hotel actualizado`,icon:'success'});
-        this.loadFormu(response)
+        this.loadFormu(this.HotelJson)
       })
       .catch(error=>{
-        console.log(error);
+
+        this.alert({mensage:error?.response?.data?.message,icon:'error'});
+        console.log(error?.response?.data?.message);
       })
     }
   }
