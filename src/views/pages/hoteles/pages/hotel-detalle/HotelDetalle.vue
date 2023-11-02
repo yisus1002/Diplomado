@@ -36,14 +36,14 @@
       </div>
       <button type="submit" class="button_form">Guardar</button>
     </form>
-<div class="slide-in-top" v-if="HotelJson.num_rooms>0">
+<div class="slide-in-top" v-if="HotelJson?.num_rooms>0">
   <h1 class="text-center text-2xl title_habitacion">Asignar habitaciones</h1>
     <form class="table_detail">
     <table>
       <thead class="">
             <tr>
                 <th scope="col" class="px-6 py-3">#</th>
-                <th scope="col" class="px-6 py-3">Codigo</th>
+                <th scope="col" class="px-6 py-3">Cantidad</th>
                 <th scope="col" class="px-6 py-3">Tipo</th>
                 <th scope="col" class="px-6 py-3">Acomodación</th>
                 <th scope="col" class="px-6 py-3">Cargado</th>
@@ -51,35 +51,42 @@
             </tr>
       </thead>
       <tbody>
-        <tr v-for="(habitacion, index) in habitacionJson" :key="index">
+        
+        <tr v-for="(habitacion, index) in habitacionesJson" :key="index">
   <td class="px-6 py-4">{{ index + 1 }}</td>
   <td>
     <input
-      v-model="habitacion.codigo"
-      type="text"
+      v-model="habitacion.quantity"
+      type="number"
+      min="0"
       class="input_form"
-      placeholder="Ingrese el codigo de habitacion"
       required
-    />
+      />
   </td>
   <td>
-    <select v-model="habitacion.tipo" class="input_form" required>
+    <select v-model="habitacion.type.id" class="input_form" required>
       <option v-for="(tipo, index) in TipoHabitacion" :key="index" :value="tipo.id"  :selected="index === 0" :disabled="index === 0">{{ tipo.name }}</option>
     </select>
   </td>
   <td>
-    <select v-model="habitacion.acomodacion" class="input_form" required>
+    <select v-model="habitacion.accommodation.id" class="input_form" required>
       <option v-for="(acomodacion, index) in TipoAcomodacion" :key="index" :value="acomodacion.id"  :selected="index === 0" :disabled="index === 0">{{ acomodacion.name }}</option>
     </select>
   </td>
   <td class="px-6 py-4 text-center">
-    <i class="fa-solid fa-xmark text-red-500"></i>
-    <i class="fa-solid fa-check text-green-500"></i>
+    <i v-if="!habitacion.id" class="fa-solid fa-xmark text-red-500"></i>
+    <i v-if="habitacion.id" class="fa-solid fa-check text-green-500"></i>
   </td>
   <td class="flex items-center px-6 py-4 space-x-3">
-    <button type="button" class="button_edit" @click="editHabitacion(habitacion.codigo)"><i class="fa-solid fa-pencil"></i></button>
-    <button type="button" class="button_remove" @click="confirmRemoveHabitacion(habitacion.codigo, index)"><i class="fa-solid fa-trash-can"></i></button>
-    <button type="button" class="button_saved" @click="saved(habitacion)"><i class="fa-solid fa-cloud-arrow-up"></i></button>
+    <button v-if="habitacion.id" type="button" class="button_edit" @click="editHabitacion(habitacion)"><i class="fa-solid fa-pencil"></i></button>
+    <button type="button" class="button_remove" @click="confirmRemoveHabitacion(habitacion, index)"><i class="fa-solid fa-trash-can"></i></button>
+    <button v-if="!habitacion.id" type="button" class="button_saved" @click="saved(
+                { 
+                  quantity: habitacion.quantity,
+                  room_type_id: habitacion.type.id,
+                  accommodation_id: habitacion.accommodation.id,
+                }, index
+    )"><i class="fa-solid fa-cloud-arrow-up"></i></button>
   </td>
 </tr>
 
@@ -87,7 +94,7 @@
     </table>
     </form>
     <div class="">
-      <button v-if="HotelJson?.num_rooms>habitacionJson.length" type="button" @click="createHabitacion" class="button_form button_crear"><i class="fa-solid fa-plus"></i></button>
+      <button v-if="HotelJson?.num_rooms>habitacionesJson.length" type="button" @click="createHabitacion" class="button_form button_crear"><i class="fa-solid fa-plus"></i></button>
     </div>
 </div>
     </div>
@@ -109,9 +116,10 @@ export default {
       TipoHabitacion: [],
       TipoAcomodacion:[],
       HotelJson:{},
-      habitacionJson:[],
+      habitacionesJson:[],
       FormuHotel:{},
       ciudades:[],
+
     }
   },
   created(){
@@ -132,6 +140,7 @@ export default {
     this.getCitys();
     this.getTyperooms();
     this.getAcomodation();
+    
   },
   methods: {
     ...mapMutations(['alert']),
@@ -141,22 +150,30 @@ export default {
     editHabitacion(){
 
     },
-    confirmRemoveHabitacion(codigo, index){
-      this.habitacionJson.splice(index, 1);
-
-      // this.habitacionJson = this.habitacionJson.filter((ele) => ele.codigo !== index);
-    },
-    saved(habitacion){
-
-      // console.log(habitacion);
-      if(habitacion.codigo==='' || habitacion.tipo==='Seleccione' || habitacion.acomodacion==='Seleccione'){
-        this.alert({mensage:`Tiene campos sin completar`,icon:'warning'});
+    confirmRemoveHabitacion(habitacion, index){
+      console.log(habitacion);
+      if(habitacion?.id){
+        this.deleteHabitacion(habitacion.id, index);
         return;
       }
-      if (this.HotelJson.id) {
-        habitacion.hotel_id = this.HotelJson.id;
-        this.postHabitacion(habitacion);
+          
+      this.habitacionesJson.splice(index, 1);
+
+
+      // this.habitacionesJson = this.habitacionesJson.filter((ele) => ele.codigo !== index);
+    },
+    saved(habitacion , index){
+      // console.log(index);
+      console.log(habitacion);
+      let habiAux ={
+        ...habitacion,
+        hotel_id: parseInt(this.id)
       }
+      console.log(habiAux);
+      if(habiAux){
+        this.postHabitacion(habiAux, index);
+      }
+
     },
     
     send(){
@@ -171,11 +188,12 @@ export default {
       this.$refs.FormuHotel.reset();
     },
     createHabitacion(){
-      if(this.HotelJson?.num_rooms>this.habitacionJson.length){
-        this.habitacionJson.push({
-          codigo:'',
-          tipo:'Seleccione',
-          acomodacion:'Seleccione',
+
+      if(this.HotelJson?.num_rooms>this.habitacionesJson.length){
+        this.habitacionesJson.push({
+          quantity:0,
+          type:{id: 0, name: 'Seleccione'},
+          accommodation:{id: 0, name: 'Seleccione'},
         })
       }
 
@@ -190,9 +208,9 @@ export default {
         num_rooms: hotel?.num_rooms
       }
     },
-    loadFormu1(habitacion){
-      this.habitacion = habitacion;
-    },
+    // loadFormu1(habitacion){
+    //   this.habitacion = habitacion;
+    // },
     getCitys(){
       Citys.getCityes()
       .then(response => {
@@ -209,6 +227,7 @@ export default {
       Tiposroom.getTyperooms()
       .then(response => {
         this.TipoHabitacion = response;
+        console.log(this.TipoHabitacion);
         this.TipoHabitacion.unshift({id:0,name:'Seleccione'});
       })
       .catch(error => {
@@ -220,6 +239,7 @@ export default {
       Acomodacion.getAcomodation()
       .then(response => {
         this.TipoAcomodacion = response;
+        console.log(this.TipoAcomodacion);
         this.TipoAcomodacion.unshift({id:0,name:'Seleccione'});
       })
       .catch(error => {
@@ -246,8 +266,10 @@ export default {
     getHabitacionByID(id) {
       HabitacionService.getHabitacionId(id)
         .then((response) => {
-          this.HabitacionJson = response;
-          this.loadFormu1(this.HabitacionJson);
+          console.log(response);
+          this.habitacionesJson = response.data;
+          console.log(this.habitacionesJson);
+          // this.loadFormu1(this.habitacionesJson);
         })
         .catch((error) => {
           console.log(error);
@@ -265,13 +287,35 @@ export default {
         console.log(error?.response?.data?.message);
       })
     },
-    postHabitacion(habitacion) {
+    postHabitacion(habitacion, index) {
       HabitacionService.postHabitacion(habitacion)
         .then(response => {
-          this.HabitacionJson = response.data;
+          console.log(response);
+          // console.log(this.habitacionesJson);
+          // console.log(response);
+          // quantity:0,
+          // type:{id: 0, name: 'Seleccione'},
+          // accommodation:{id: 0, name: 'Seleccione'},
+
+          let obj={
+            id:response.data.id,
+            quantity:response.data.quantity,           
+            accommodation:this.TipoHabitacion[response.data.accommodation_id],
+            type:this.TipoAcomodacion[response.data.room_type_id],
+          }
+          console.log(this.habitacionesJson);
+          console.log(obj);
+          this.habitacionesJson[index] = obj;
+          // this.habitacionesJson.push(obj);
+          // hotel_id
+            
+            
+            
+          // this.habitacionesJson.push(response.data);
           this.alert({ mensage: `Habitación creada`, icon: 'success' });
         })
         .catch(error => {
+          console.log(error);
           this.alert({ mensage: error?.response?.data?.message || 'Error al crear la habitación', icon: 'error' });
           console.error('Error al crear la habitación:', error);
         });
@@ -279,6 +323,7 @@ export default {
     putHotel(id, hotel){
       HotelService.puthotel(id, hotel)
       .then(response => {
+        // this.habitacionesJson
         // console.log(response);
         this.HotelJson=response.data;
         this.alert({mensage:`Hotel actualizado`,icon:'success'});
@@ -293,14 +338,25 @@ export default {
     putHabitacion(id, habitacion){
       HabitacionService.putHabitacion(id, habitacion)
       .then(response => {
-        this.HabitacionJson=response.data;
+        this.habitacionesJson=response.data;
         this.alert({mensage:`Habitación actualizada`,icon:'success'});
-        this.loadFormu1(this.HabitacionJson)
+        // this.loadFormu1(this.habitacionesJson)
       })
       .catch(error=>{ 
         this.alert({mensage:error?.response?.data?.message,icon:'error'});
         console.log(error?.response?.data?.message);
 })
+    },
+    deleteHabitacion(id, index){
+      HabitacionService.deleteHabitacion(id)
+      .then(response => {
+        
+      this.habitacionesJson.splice(index, 1);
+        console.log(response);
+      })
+      .catch(error => {
+        console.log(error);
+      })
     }
   }
 };

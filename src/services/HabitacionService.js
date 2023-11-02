@@ -15,7 +15,7 @@ export default {
 
   postHabitacion(habitacion) {
     return axios
-      .post(`${apiBaseURL}/rooms/`, habitacion)
+      .post(`${apiBaseURL}/rooms`, habitacion)
       .then((response) => response.data);
   },
 
