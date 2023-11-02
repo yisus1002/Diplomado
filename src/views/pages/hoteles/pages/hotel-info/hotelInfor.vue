@@ -34,6 +34,12 @@
         </div>
       </div>
     </div>
+    <div class="cont__habitacion" v-if="habitacionHotel.length>0">
+      <h1 class="h1">Habitaciones</h1>
+      <div  class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4 p-2">
+        <CardHabitacion v-for="(habitacion, index) in habitacionHotel" :key="index" :Jsonl="habitacion"></CardHabitacion>
+      </div>
+    </div>
   </div>
 </template>
 
@@ -56,6 +62,7 @@ import {
 import HotelService from '@/services/HotelService';
 import HabitacionService from '@/services/HabitacionService';
 import { mapMutations } from 'vuex';
+import  CardHabitacion  from '@/components/shared/cardHabitacion.vue';
 
 ChartJS.register(
   ArcElement,
@@ -70,6 +77,7 @@ ChartJS.register(
 export default {
   props: ['id'],
   components: {
+    CardHabitacion,
     // Doughnut,
     // Bar,
   },
@@ -78,7 +86,7 @@ export default {
   },
   data() {
     return {
-      HotelJson: {},
+      habitacionHotel: [],
       Detalle_hotel: {},
       habitacionType: {
         estandar: 'ESTANDAR',
@@ -118,6 +126,20 @@ export default {
           this.alert({ mensage: error, icon: 'error' });
           this.goBack();
         });
+    },
+    getHabitacioneHotel(id){
+      HabitacionService.getHabitacionId(id)
+      .then((response) => {
+        
+        this.habitacionHotel = response.data;
+        console.log(this.habitacionHotel);
+          
+      })
+      .catch((error) => {
+        console.log(error);
+        // this.alert({ mensage: error, icon: 'error' });
+        // this.goBack();
+      });
     },
     getCountHabitacionesByHotel() {
       const search = {
@@ -190,9 +212,26 @@ export default {
     },
   },
   mounted() {
-    this.getHotelByID(this.id);
+    this.getHotelByID(this.id),
+    this.getHabitacioneHotel(this.id)
   },
 };
 </script>
 
-<style scoped></style>
+<style scoped>
+.cont__habitacion{
+  background-color: #ffffff3d;
+    padding: 0;
+    border-radius: 30px;
+    justify-content: center;
+    display: flex;
+    flex-direction: column;
+}
+.h1{
+  text-align: center;
+    font-size: 30px;
+    font-weight: 700;
+   @apply
+    text-green-500
+}
+</style>
