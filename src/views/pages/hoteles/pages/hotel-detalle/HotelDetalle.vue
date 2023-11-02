@@ -108,6 +108,7 @@ import HabitacionService from '@/services/HabitacionService';
 import { mapMutations } from 'vuex';
 import Citys from '@/services/ServicesSelectores';
 import Tiposroom from '@/services/ServicesSelectores'
+import Swal from 'sweetalert2';
 import Acomodacion from '@/services/ServicesSelectores'
 export default {
   props: ['id'], 
@@ -147,20 +148,34 @@ export default {
     goBack() {
       this.$router.push('/hotel');
     },
+    
     editHabitacion(){
-
+      
     },
     confirmRemoveHabitacion(habitacion, index){
-      console.log(habitacion);
+      /* console.log(habitacion);
       if(habitacion?.id){
         this.deleteHabitacion(habitacion.id, index);
         return;
       }
-          
-      this.habitacionesJson.splice(index, 1);
-
-
-      // this.habitacionesJson = this.habitacionesJson.filter((ele) => ele.codigo !== index);
+      this.habitacionesJson.splice(index, 1); */
+      
+      Swal.fire({
+        title: 'Confirmar eliminación',
+        text: '¿Estás seguro de eliminar esta habitación?',
+        icon: 'warning',
+        showCancelButton: true,
+        confirmButtonText: 'Eliminar',
+        cancelButtonText: 'Cancelar'
+      }).then((result) => {
+          if (result.isConfirmed) {
+              if (habitacion?.id) {
+                  this.deleteHabitacion(habitacion.id, index);
+              } else {
+                  this.habitacionesJson.splice(index, 1);
+              }
+          }
+      });
     },
     saved(habitacion , index){
       // console.log(index);
@@ -172,6 +187,9 @@ export default {
       console.log(habiAux);
       if(habiAux){
         this.postHabitacion(habiAux, index);
+      }
+      else{
+        this.alert();
       }
 
     },
@@ -291,12 +309,6 @@ export default {
       HabitacionService.postHabitacion(habitacion)
         .then(response => {
           console.log(response);
-          // console.log(this.habitacionesJson);
-          // console.log(response);
-          // quantity:0,
-          // type:{id: 0, name: 'Seleccione'},
-          // accommodation:{id: 0, name: 'Seleccione'},
-
           let obj={
             id:response.data.id,
             quantity:response.data.quantity,           
@@ -306,12 +318,6 @@ export default {
           console.log(this.habitacionesJson);
           console.log(obj);
           this.habitacionesJson[index] = obj;
-          // this.habitacionesJson.push(obj);
-          // hotel_id
-            
-            
-            
-          // this.habitacionesJson.push(response.data);
           this.alert({ mensage: `Habitación creada`, icon: 'success' });
         })
         .catch(error => {
@@ -350,7 +356,7 @@ export default {
     deleteHabitacion(id, index){
       HabitacionService.deleteHabitacion(id)
       .then(response => {
-        
+        this.alert({mensage:`Se a elimina la habitación ${id}`,icon:'success'});
       this.habitacionesJson.splice(index, 1);
         console.log(response);
       })
