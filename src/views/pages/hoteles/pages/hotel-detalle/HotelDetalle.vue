@@ -64,12 +64,12 @@
   </td>
   <td>
     <select v-model="habitacion.tipo" class="input_form" required>
-      <option v-for="(tipo, index) in TipoHabitacion" :key="index" :value="tipo"  :selected="index === 0" :disabled="index === 0">{{ tipo }}</option>
+      <option v-for="(tipo, index) in TipoHabitacion" :key="index" :value="tipo.id"  :selected="index === 0" :disabled="index === 0">{{ tipo.name }}</option>
     </select>
   </td>
   <td>
     <select v-model="habitacion.acomodacion" class="input_form" required>
-      <option v-for="(acomodacion, index) in TipoAcomodacion" :key="index" :value="acomodacion"  :selected="index === 0" :disabled="index === 0">{{ acomodacion }}</option>
+      <option v-for="(acomodacion, index) in TipoAcomodacion" :key="index" :value="acomodacion.id"  :selected="index === 0" :disabled="index === 0">{{ acomodacion.name }}</option>
     </select>
   </td>
   <td class="px-6 py-4 text-center">
@@ -97,14 +97,17 @@
   
 <script>
 import HotelService from '@/services/HotelService';
+import HabitacionService from '@/services/HabitacionService';
 import { mapMutations } from 'vuex';
 import Citys from '@/services/ServicesSelectores';
+import Tiposroom from '@/services/ServicesSelectores'
+import Acomodacion from '@/services/ServicesSelectores'
 export default {
   props: ['id'], 
   data(){
     return {
-      TipoHabitacion: ['Seleccione','Estandar', 'Junior', 'Suite'],
-      TipoAcomodacion:['Seleccione','Sencilla', 'Doble', 'Triple', 'Cuádruple'],
+      TipoHabitacion: [],
+      TipoAcomodacion:[],
       HotelJson:{},
       habitacionJson:[],
       FormuHotel:{},
@@ -118,14 +121,17 @@ export default {
     if (id !== 'new') {
       // console.log(this.id);
       this.getHotelByID(id);
+      this.getHabitacionByID(id);
     }else{
-      this.loadFormu({ city:{id:0,name:'Seleccione'}, name:'', nit:'', address:'', num_rooms:0,});
+      this.loadFormu({ city:{id:0,name:'Seleccione'}, name:'', nit:'', address:'', num_rooms:0, tipo:{id:0,name:'Seleccione'}, acomodacion:{id:0,name:'Seleccione'},});
 
     }
   },
 
   mounted() {
     this.getCitys();
+    this.getTyperooms();
+    this.getAcomodation();
   },
   methods: {
     ...mapMutations(['alert']),
@@ -139,17 +145,20 @@ export default {
       this.habitacionJson.splice(index, 1);
 
       // this.habitacionJson = this.habitacionJson.filter((ele) => ele.codigo !== index);
-
     },
     saved(habitacion){
+
       // console.log(habitacion);
-      if(habitacion.codigo==='',habitacion.tipo==='Seleccione',habitacion.acomodacion==='Seleccione'){
+      if(habitacion.codigo==='' || habitacion.tipo==='Seleccione' || habitacion.acomodacion==='Seleccione'){
         this.alert({mensage:`Tiene campos sin completar`,icon:'warning'});
         return;
       }
-      this.alert({mensage:`Habitación creada`,icon:'success'});
-
+      if (this.HotelJson.id) {
+        habitacion.hotel_id = this.HotelJson.id;
+        this.postHabitacion(habitacion);
+      }
     },
+    
     send(){
       // console.log(this.FormuHotel);
       if(this.HotelJson?.id){
@@ -180,7 +189,9 @@ export default {
         address: hotel.address,
         num_rooms: hotel?.num_rooms
       }
-
+    },
+    loadFormu1(habitacion){
+      this.habitacion = habitacion;
     },
     getCitys(){
       Citys.getCityes()
@@ -192,6 +203,28 @@ export default {
       .catch(error => {
                 this.alert({mensage:error?.response?.data?.message,icon:'error'});
         console.log(error?.response?.data?.message);
+      })
+    },
+    getTyperooms(){
+      Tiposroom.getTyperooms()
+      .then(response => {
+        this.TipoHabitacion = response;
+        this.TipoHabitacion.unshift({id:0,name:'Seleccione'});
+      })
+      .catch(error => {
+        this.alert({mensage:error?.response?.data?.message,icon:'error'});
+        console.log(error?.response?.data?.mensage);
+      })
+    },
+    getAcomodation(){
+      Acomodacion.getAcomodation()
+      .then(response => {
+        this.TipoAcomodacion = response;
+        this.TipoAcomodacion.unshift({id:0,name:'Seleccione'});
+      })
+      .catch(error => {
+        this.alert({mensage:error?.response?.data?.message,icon:'error'});
+        console.log(error?.response?.data?.mensage);
       })
     },
     getHotelByID(id){
@@ -210,6 +243,16 @@ export default {
         this.goBack();
         })
     },
+    getHabitacionByID(id) {
+      HabitacionService.getHabitacionId(id)
+        .then((response) => {
+          this.HabitacionJson = response;
+          this.loadFormu1(this.HabitacionJson);
+        })
+        .catch((error) => {
+          console.log(error);
+        });
+    },
     postHotel(hotel){
       HotelService.posthotel(hotel)
       .then(response=>{
@@ -221,6 +264,17 @@ export default {
         this.alert({mensage:error?.response?.data?.message,icon:'error'});
         console.log(error?.response?.data?.message);
       })
+    },
+    postHabitacion(habitacion) {
+      HabitacionService.postHabitacion(habitacion)
+        .then(response => {
+          this.HabitacionJson = response.data;
+          this.alert({ mensage: `Habitación creada`, icon: 'success' });
+        })
+        .catch(error => {
+          this.alert({ mensage: error?.response?.data?.message || 'Error al crear la habitación', icon: 'error' });
+          console.error('Error al crear la habitación:', error);
+        });
     },
     putHotel(id, hotel){
       HotelService.puthotel(id, hotel)
@@ -235,6 +289,18 @@ export default {
         this.alert({mensage:error?.response?.data?.message,icon:'error'});
         console.log(error?.response?.data?.message);
       })
+    },
+    putHabitacion(id, habitacion){
+      HabitacionService.putHabitacion(id, habitacion)
+      .then(response => {
+        this.HabitacionJson=response.data;
+        this.alert({mensage:`Habitación actualizada`,icon:'success'});
+        this.loadFormu1(this.HabitacionJson)
+      })
+      .catch(error=>{ 
+        this.alert({mensage:error?.response?.data?.message,icon:'error'});
+        console.log(error?.response?.data?.message);
+})
     }
   }
 };
