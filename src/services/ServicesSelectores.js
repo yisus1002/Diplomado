@@ -7,9 +7,13 @@ export default {
         return axios.get(`${apiBaseURL}/cities`)
           .then(response => response.data);
     },
-    getRoomTypes() {
+    getTyperooms() {
         return axios.get(`${apiBaseURL}/room-types`)
           .then(response => response.data);
-    }
+    },
+    getAcomodation() {
+      return axios.get(`${apiBaseURL}/accommodation-types`)
+        .then(response => response.data);
+  }
     
 }

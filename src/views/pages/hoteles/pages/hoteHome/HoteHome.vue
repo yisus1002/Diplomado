@@ -102,7 +102,7 @@ export default {
                 this.alert({mensage:`Se a eliminado el hotel ${id}`,icon:'success'});
                 this.HotelJson= this.HotelJson.filter((ele)=>ele.id!==id);
             }).catch(error=>{
-                this.alert({mensage:error,icon:'error'})
+                this.alert({mensage:error?.response.data.message,icon:'error'})
             })
         }
     }
