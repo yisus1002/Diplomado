@@ -5,7 +5,7 @@
     <button type="button" class="button_back" @click="goBack">
       <i class="fa-solid fa-arrow-left"></i> Regresar
     </button>
-    <div class="container_chart container_form">
+    <div class="container_chart">
       <div>
         <Doughnut :data="chartDataHabitacionesByType" :options="chartOptions" />
       </div>

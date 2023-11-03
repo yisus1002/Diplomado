@@ -7,7 +7,7 @@
         <div class="grid gap-6 mb-6 md:grid-cols-1">
           <!-- <h1 class="detaller_form">{{ Jsonl?.name }}</h1> -->
           <div class="grip gap-6 mb-6 md:grid-cols-2">
-            <p class="detalle_h2">Codigp: {{ Jsonl?.id }}</p>
+            <p class="detalle_h2">Codigo: {{ Jsonl?.id }}</p>
             <p class="detalle_h2">Acomodación: {{ Jsonl?.type?.name }}</p>
             <p class="detalle_h2">Tipo: {{ Jsonl?.accommodation?.name }}</p>
           </div>

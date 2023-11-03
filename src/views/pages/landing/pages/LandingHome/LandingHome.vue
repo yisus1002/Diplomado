@@ -1,7 +1,7 @@
 <template lang="">
   <div class="landingContainer">
     <h1 class="head__title Hotel__home__title">Admin / Dashboard</h1>
-    <div class="container_chart container_form">
+    <div class=" container_form">
       <div>
         <Doughnut :data="chartDataHabitacionesByType" :options="chartOptions" />
       </div>

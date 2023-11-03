@@ -231,3 +231,13 @@
     rounded-md
     mb-4
 }
+.container_chart{
+    box-shadow: 2px 1px 7px 5px #b6b6b6;
+    background-color: #ffff; 
+    display: flex;
+    flex-direction: column;
+    @apply p-4
+    flex
+    rounded-md
+    mb-4
+}
