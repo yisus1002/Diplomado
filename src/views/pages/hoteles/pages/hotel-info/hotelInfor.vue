@@ -5,7 +5,7 @@
     <button type="button" class="button_back" @click="goBack">
       <i class="fa-solid fa-arrow-left"></i> Regresar
     </button>
-    <!-- <div class="container_chart container_form">
+    <div class="container_chart container_form">
       <div>
         <Doughnut :data="chartDataHabitacionesByType" :options="chartOptions" />
       </div>
@@ -15,10 +15,13 @@
           :options="chartOptions"
         />
       </div>
-    </div> -->
+    </div>
     <div class="container_detalle">
       <div class="flex items-center justify-center p-3">
-        <img src="https://loremflickr.com/640/480/city" class="rounded-xl max-w-60 mx-auto" />
+        <img
+          src="https://loremflickr.com/640/480/city"
+          class="rounded-xl max-w-60 mx-auto"
+        />
       </div>
       <div class="container_form">
         <div class="grid gap-6 mb-6 md:grid-cols-1">
@@ -34,10 +37,14 @@
         </div>
       </div>
     </div>
-    <div class="cont__habitacion" v-if="habitacionHotel.length>0">
+    <div class="cont__habitacion" v-if="habitacionHotel.length > 0">
       <h1 class="h1">Habitaciones</h1>
-      <div  class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4 p-2">
-        <CardHabitacion v-for="(habitacion, index) in habitacionHotel" :key="index" :Jsonl="habitacion"></CardHabitacion>
+      <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4 p-2">
+        <CardHabitacion
+          v-for="(habitacion, index) in habitacionHotel"
+          :key="index"
+          :Jsonl="habitacion"
+        ></CardHabitacion>
       </div>
     </div>
   </div>
@@ -54,7 +61,7 @@ import {
   LinearScale,
   BarElement,
 } from 'chart.js';
-// import { Doughnut, Bar } from 'vue-chartjs';
+import { Doughnut, Bar } from 'vue-chartjs';
 import {
   dataConfig,
   options,
@@ -62,7 +69,7 @@ import {
 import HotelService from '@/services/HotelService';
 import HabitacionService from '@/services/HabitacionService';
 import { mapMutations } from 'vuex';
-import  CardHabitacion  from '@/components/shared/cardHabitacion.vue';
+import CardHabitacion from '@/components/shared/cardHabitacion.vue';
 
 ChartJS.register(
   ArcElement,
@@ -78,26 +85,25 @@ export default {
   props: ['id'],
   components: {
     CardHabitacion,
-    // Doughnut,
-    // Bar,
+    Doughnut,
+    Bar,
   },
   created() {
-    // this.DataHabitaciones();
+    this.DataHabitaciones();
   },
   data() {
     return {
       habitacionHotel: [],
       Detalle_hotel: {},
       habitacionType: {
-        estandar: 'ESTANDAR',
-        junior: 'JUNIOR',
         suite: 'SUITE',
+        estandar: 'ESTANDAR',
+        matrimonial: 'MATRIMONIAL',
       },
       habitacionAcomodacion: {
         sencilla: 'SENCILLA',
         doble: 'DOBLE',
         triple: 'TRIPLE',
-        cuadruple: 'CUADRUPLE',
       },
       chartDataHabitacionesByType: dataConfig([], [], []),
       chartDataHabitacionesByAcomodacion: dataConfig([], [], []),
@@ -113,12 +119,12 @@ export default {
     getHotelByID(id) {
       HotelService.gethotelId(id)
         .then((response) => {
-          if(!response.data){
+          if (!response.data) {
             this.goBack();
             return;
           }
           this.Detalle_hotel = response.data;
-          
+
           // console.log(response);
         })
         .catch((error) => {
@@ -127,39 +133,36 @@ export default {
           this.goBack();
         });
     },
-    getHabitacioneHotel(id){
+    getHabitacioneHotel(id) {
       HabitacionService.getHabitacionId(id)
-      .then((response) => {
-        
-        this.habitacionHotel = response.data;
-        console.log(this.habitacionHotel);
-          
-      })
-      .catch((error) => {
-        console.log(error);
-        // this.alert({ mensage: error, icon: 'error' });
-        // this.goBack();
-      });
+        .then((response) => {
+          this.habitacionHotel = response.data;
+        })
+        .catch((error) => {
+          console.log(error);
+          // this.alert({ mensage: error, icon: 'error' });
+          // this.goBack();
+        });
     },
     getCountHabitacionesByHotel() {
       const search = {
-        tipo: 'tipo',
-        acomodacion: 'acomodacion',
+        tipo: 'type.name',
+        acomodacion: 'accommodation.name',
       };
-      return HabitacionService.getHabitacion()
+      return HabitacionService.getHabitacionId(this.id)
         .then((res) => {
           const countHabitacionesByType = {};
           const countHabitacionesByAcomodacion = {};
           for (const key in this.habitacionType) {
             countHabitacionesByType[key] = this.getCountHabitaciones({
-              data: res,
+              data: res.data,
               search: search.tipo,
               type: this.habitacionType[key],
             });
           }
           for (const key in this.habitacionAcomodacion) {
             countHabitacionesByAcomodacion[key] = this.getCountHabitaciones({
-              data: res,
+              data: res.data,
               search: search.acomodacion,
               type: this.habitacionAcomodacion[key],
             });
@@ -173,27 +176,29 @@ export default {
     },
 
     getCountHabitaciones({ data = [], search, type }) {
-      const habitacionesType = data.filter(
-        (habitacion) =>
-          habitacion.idHotel === +this.id && habitacion[search] === type
-      );
+      const habitacionesType = data.filter((habitacion) => {
+        //Eval nos permite usar codigo JS como strings
+        return (
+          habitacion.hotel_id === +this.id &&
+          eval(`habitacion.${search}`) === type
+        );
+      });
 
       return habitacionesType.length;
     },
     DataHabitaciones() {
       this.getCountHabitacionesByHotel().then(
         ({ countHabitacionesByType, countHabitacionesByAcomodacion }) => {
-          const { estandar, junior, suite } = countHabitacionesByType;
-          const { sencilla, doble, triple, cuadruple } =
-            countHabitacionesByAcomodacion;
+          const { estandar, matrimonial, suite } = countHabitacionesByType;
+          const { sencilla, doble, triple } = countHabitacionesByAcomodacion;
           this.chartDataHabitacionesByType = dataConfig(
             [
-              this.habitacionType.estandar,
-              this.habitacionType.junior,
               this.habitacionType.suite,
+              this.habitacionType.estandar,
+              this.habitacionType.matrimonial,
             ],
             ['#41B883', '#00D8FF', '#DD1B16'],
-            [estandar, junior, suite]
+            [suite, estandar, matrimonial]
           );
 
           this.chartDataHabitacionesByAcomodacion = dataConfig(
@@ -201,10 +206,9 @@ export default {
               this.habitacionAcomodacion.sencilla,
               this.habitacionAcomodacion.doble,
               this.habitacionAcomodacion.triple,
-              this.habitacionAcomodacion.cuadruple,
             ],
             ['#41B883', '#00D8FF', '#DD1B16', '#f87979'],
-            [sencilla, doble, triple, cuadruple],
+            [sencilla, doble, triple],
             'Acomodación'
           );
         }
@@ -212,26 +216,24 @@ export default {
     },
   },
   mounted() {
-    this.getHotelByID(this.id),
-    this.getHabitacioneHotel(this.id)
+    this.getHotelByID(this.id), this.getHabitacioneHotel(this.id);
   },
 };
 </script>
 
 <style scoped>
-.cont__habitacion{
+.cont__habitacion {
   background-color: #ffffff3d;
-    padding: 0;
-    border-radius: 30px;
-    justify-content: center;
-    display: flex;
-    flex-direction: column;
+  padding: 0;
+  border-radius: 30px;
+  justify-content: center;
+  display: flex;
+  flex-direction: column;
 }
-.h1{
+.h1 {
   text-align: center;
-    font-size: 30px;
-    font-weight: 700;
-   @apply
-    text-green-500
+  font-size: 30px;
+  font-weight: 700;
+  @apply text-green-500;
 }
 </style>
