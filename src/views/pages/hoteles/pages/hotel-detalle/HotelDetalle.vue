@@ -149,17 +149,14 @@ export default {
       this.$router.push('/hotel');
     },
     
-    editHabitacion(){
-      
+    editHabitacion(habitacion){
+      console.log(habitacion);
     },
     confirmRemoveHabitacion(habitacion, index){
-      /* console.log(habitacion);
-      if(habitacion?.id){
-        this.deleteHabitacion(habitacion.id, index);
+      if(!habitacion?.id){
+        this.habitacionesJson.splice(index, 1);
         return;
       }
-      this.habitacionesJson.splice(index, 1); */
-      
       Swal.fire({
         title: 'Confirmar eliminación',
         text: '¿Estás seguro de eliminar esta habitación?',
@@ -167,14 +164,8 @@ export default {
         showCancelButton: true,
         confirmButtonText: 'Eliminar',
         cancelButtonText: 'Cancelar'
-      }).then((result) => {
-          if (result.isConfirmed) {
-              if (habitacion?.id) {
-                  this.deleteHabitacion(habitacion.id, index);
-              } else {
-                  this.habitacionesJson.splice(index, 1);
-              }
-          }
+      }).then((result) => { 
+        result.isConfirmed && this.deleteHabitacion(habitacion.id, index);
       });
     },
     saved(habitacion , index){
@@ -182,7 +173,7 @@ export default {
       console.log(habitacion);
       let habiAux ={
         ...habitacion,
-        hotel_id: parseInt(this.id)
+        hotel_id: this.HotelJson?.id
       }
       console.log(habiAux);
       if(habiAux){
@@ -298,6 +289,7 @@ export default {
       .then(response=>{
         // console.log(response);
         this.HotelJson=response.data;
+        console.log(this.HotelJson);
         this.alert({mensage:`Hotel creado`,icon:'success'});
       })
       .catch(error => {
