@@ -137,11 +137,11 @@ export default {
       HabitacionService.getHabitacionId(id)
         .then((response) => {
           this.habitacionHotel = response.data;
+          this.DataHabitaciones();
         })
         .catch((error) => {
           console.log(error);
-          // this.alert({ mensage: error, icon: 'error' });
-          // this.goBack();
+          this.alert({ mensage: error, icon: 'error' });
         });
     },
     getCountHabitacionesByHotel() {
@@ -149,17 +149,17 @@ export default {
         tipo: 'type.name',
         acomodacion: 'accommodation.name',
       };
-      return HabitacionService.getHabitacionId(this.id)
-        .then((res) => {
-          res.data.map((ele)=>{
-            /* if(ele.)
-            console.log(ele); */
-          })
+      let dataAux=[];
+      this.habitacionHotel.forEach(element => {
+            for(let i=0; i<element.quantity; i++){
+              dataAux.push(element)
+            }
+          });
           const countHabitacionesByType = {};
           const countHabitacionesByAcomodacion = {};
           for (const key in this.habitacionType) {
             countHabitacionesByType[key] = this.getCountHabitaciones({
-              data: res.data,
+              data: dataAux,
               search: search.tipo,
               type: this.habitacionType[key],
             });
@@ -167,7 +167,7 @@ export default {
           console.log(countHabitacionesByType);
           for (const key in this.habitacionAcomodacion) {
             countHabitacionesByAcomodacion[key] = this.getCountHabitaciones({
-              data: res.data,
+              data: dataAux,
               search: search.acomodacion,
               type: this.habitacionAcomodacion[key],
             });
@@ -176,13 +176,10 @@ export default {
             countHabitacionesByType,
             countHabitacionesByAcomodacion,
           };
-        })
-        .catch((error) => console.log(error));
     },
 
     getCountHabitaciones({ data = [], search, type }) {
       const habitacionesType = data.filter((habitacion) => {
-        //Eval nos permite usar codigo JS como strings
         return (
           habitacion.hotel_id === +this.id &&
           eval(`habitacion.${search}`) === type
@@ -192,8 +189,9 @@ export default {
       return habitacionesType.length;
     },
     DataHabitaciones() {
-      this.getCountHabitacionesByHotel().then(
-        ({ countHabitacionesByType, countHabitacionesByAcomodacion }) => {
+      let data = this.getCountHabitacionesByHotel();
+        const { countHabitacionesByType, countHabitacionesByAcomodacion } = data;
+        // console.log(countHabitacionesByType);
           const { estandar, matrimonial, suite } = countHabitacionesByType;
           const { sencilla, doble, triple } = countHabitacionesByAcomodacion;
           this.chartDataHabitacionesByType = dataConfig(
@@ -216,7 +214,9 @@ export default {
             [sencilla, doble, triple],
             'Acomodación'
           );
-        }
+        // }
+      console.log(
+        data
       );
     },
   },
