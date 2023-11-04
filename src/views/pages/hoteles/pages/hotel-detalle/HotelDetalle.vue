@@ -52,13 +52,13 @@
       </thead>
       <tbody>
         
-        <tr v-for="(habitacion, index) in habitacionesJson" :key="index">
+        <tr  v-for="(habitacion, index) in habitacionesJson" :key="index">
   <td class="px-6 py-4">{{ index + 1 }}</td>
   <td>
-    <input
+    <input ref="myParagraph"
       v-model="habitacion.quantity"
       type="number"
-      min="0"
+      min="1"
       class="input_form"
       required
       />
@@ -94,7 +94,7 @@
     </table>
     </form>
     <div class="">
-      <button v-if="HotelJson?.num_rooms>habitacionesJson.length" type="button" @click="createHabitacion" class="button_form button_crear"><i class="fa-solid fa-plus"></i></button>
+      <button v-if="HotelJson?.num_rooms> verificaH" type="button" @click="createHabitacion" class="button_form button_crear"><i class="fa-solid fa-plus"></i></button>
     </div>
 </div>
     </div>
@@ -120,7 +120,7 @@ export default {
       habitacionesJson:[],
       FormuHotel:{},
       ciudades:[],
-
+      verificaH:0
     }
   },
   created(){
@@ -143,14 +143,30 @@ export default {
     this.getAcomodation();
     
   },
+  updated() {
+    this.$nextTick(() => {
+      this.verificaH =( this.verificarHabitaciones(this.habitacionesJson));
+    });
+  
+  },
   methods: {
     ...mapMutations(['alert']),
     goBack() {
       this.$router.push('/hotel');
     },
     
-    editHabitacion(habitacion){
-      console.log(habitacion);
+    editHabitacion(habitacion, index){
+      let habiAux ={
+        hotel_id: this.HotelJson?.id,
+        room_type_id: habitacion.type.id,
+        accommodation_id: habitacion.accommodation.id,
+        quantity: habitacion.quantity
+      }
+      if(habitacion.id){
+        this.putHabitacion(habitacion.id, habiAux, index);
+      }else{
+        this.alert();
+      }
     },
     confirmRemoveHabitacion(habitacion, index){
       if(!habitacion?.id){
@@ -169,24 +185,16 @@ export default {
       });
     },
     saved(habitacion , index){
-      // console.log(index);
-      console.log(habitacion);
       let habiAux ={
         ...habitacion,
         hotel_id: this.HotelJson?.id
       }
-      console.log(habiAux);
       if(habiAux){
         this.postHabitacion(habiAux, index);
       }
-      else{
-        this.alert();
-      }
-
     },
     
     send(){
-      // console.log(this.FormuHotel);
       if(this.HotelJson?.id){
         this.putHotel(this.HotelJson.id, this.FormuHotel);
         return;
@@ -200,7 +208,7 @@ export default {
 
       if(this.HotelJson?.num_rooms>this.habitacionesJson.length){
         this.habitacionesJson.push({
-          quantity:0,
+          quantity:1,
           type:{id: 0, name: 'Seleccione'},
           accommodation:{id: 0, name: 'Seleccione'},
         })
@@ -217,26 +225,20 @@ export default {
         num_rooms: hotel?.num_rooms
       }
     },
-    // loadFormu1(habitacion){
-    //   this.habitacion = habitacion;
-    // },
     getCitys(){
       Citys.getCityes()
       .then(response => {
         this.ciudades = response;
         this.ciudades.unshift({id:0,name:'Seleccione'});
-                // console.log(response);
       })
       .catch(error => {
                 this.alert({mensage:error?.response?.data?.message,icon:'error'});
-        console.log(error?.response?.data?.message);
       })
     },
     getTyperooms(){
       Tiposroom.getTyperooms()
       .then(response => {
         this.TipoHabitacion = response;
-        console.log(this.TipoHabitacion);
         this.TipoHabitacion.unshift({id:0,name:'Seleccione'});
       })
       .catch(error => {
@@ -248,7 +250,6 @@ export default {
       Acomodacion.getAcomodation()
       .then(response => {
         this.TipoAcomodacion = response;
-        console.log(this.TipoAcomodacion);
         this.TipoAcomodacion.unshift({id:0,name:'Seleccione'});
       })
       .catch(error => {
@@ -272,16 +273,20 @@ export default {
         this.goBack();
         })
     },
+    verificarHabitaciones(data){
+      const sumaQuantity = data.reduce((acumulador, elemento) => {
+        return acumulador + elemento.quantity;
+      }, 0);
+      return sumaQuantity;
+    },
     getHabitacionByID(id) {
       HabitacionService.getHabitacionId(id)
         .then((response) => {
-          console.log(response);
           this.habitacionesJson = response.data;
-          console.log(this.habitacionesJson);
-          // this.loadFormu1(this.habitacionesJson);
+          console.log(this.verificarHabitaciones(this.habitacionesJson));
         })
         .catch((error) => {
-          console.log(error);
+          this.alert({ mensage: error, icon: 'error' });
         });
     },
     postHotel(hotel){
@@ -297,6 +302,20 @@ export default {
         console.log(error?.response?.data?.message);
       })
     },
+
+    putHotel(id, hotel, index){
+      HotelService.puthotel(id, hotel)
+      .then(response => {
+        this.HotelJson[index]=response.data;
+        this.alert({mensage:`Hotel actualizado`,icon:'success'});
+        this.loadFormu(this.HotelJson)
+      })
+      .catch(error=>{
+
+        this.alert({mensage:error?.response?.data?.message,icon:'error'});
+        console.log(error?.response?.data?.message);
+      })
+    },
     postHabitacion(habitacion, index) {
       HabitacionService.postHabitacion(habitacion)
         .then(response => {
@@ -307,9 +326,15 @@ export default {
             accommodation:this.TipoHabitacion[response.data.accommodation_id],
             type:this.TipoAcomodacion[response.data.room_type_id],
           }
-          console.log(this.habitacionesJson);
-          console.log(obj);
+          //console.log(this.habitacionesJson)
           this.habitacionesJson[index] = obj;
+          let  aux=[];
+          this.habitacionesJson.forEach(element => {
+            if(element.id){
+              aux.push(element)
+            }
+          })
+          this.habitacionesJson=aux;
           this.alert({ mensage: `Habitación creada`, icon: 'success' });
         })
         .catch(error => {
@@ -318,27 +343,25 @@ export default {
           console.error('Error al crear la habitación:', error);
         });
     },
-    putHotel(id, hotel){
-      HotelService.puthotel(id, hotel)
-      .then(response => {
-        // this.habitacionesJson
-        // console.log(response);
-        this.HotelJson=response.data;
-        this.alert({mensage:`Hotel actualizado`,icon:'success'});
-        this.loadFormu(this.HotelJson)
-      })
-      .catch(error=>{
-
-        this.alert({mensage:error?.response?.data?.message,icon:'error'});
-        console.log(error?.response?.data?.message);
-      })
-    },
-    putHabitacion(id, habitacion){
+    putHabitacion(id, habitacion, index){
       HabitacionService.putHabitacion(id, habitacion)
       .then(response => {
-        this.habitacionesJson=response.data;
+        let obj={
+            id:response.data.id,
+            quantity:response.data.quantity,           
+            accommodation:this.TipoHabitacion[response.data.accommodation_id],
+            type:this.TipoAcomodacion[response.data.room_type_id],
+          }
+          
+        this.habitacionesJson[index] = obj;
+        let  aux=[];
+      this.habitacionesJson.forEach(element => {
+            if(element.id){
+              aux.push(element)
+            }
+          })
+          this.habitacionesJson=aux;
         this.alert({mensage:`Habitación actualizada`,icon:'success'});
-        // this.loadFormu1(this.habitacionesJson)
       })
       .catch(error=>{ 
         this.alert({mensage:error?.response?.data?.message,icon:'error'});
