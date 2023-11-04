@@ -326,8 +326,15 @@ export default {
             accommodation:this.TipoHabitacion[response.data.accommodation_id],
             type:this.TipoAcomodacion[response.data.room_type_id],
           }
-          console.log(this.habitacionesJson)
+          //console.log(this.habitacionesJson)
           this.habitacionesJson[index] = obj;
+          let  aux=[];
+          this.habitacionesJson.forEach(element => {
+            if(element.id){
+              aux.push(element)
+            }
+          })
+          this.habitacionesJson=aux;
           this.alert({ mensage: `Habitación creada`, icon: 'success' });
         })
         .catch(error => {
