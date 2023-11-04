@@ -10,6 +10,7 @@
             <p class="detalle_h2">Codigo: {{ Jsonl?.id }}</p>
             <p class="detalle_h2">Acomodación: {{ Jsonl?.type?.name }}</p>
             <p class="detalle_h2">Tipo: {{ Jsonl?.accommodation?.name }}</p>
+            <p class="detalle_h2">Cantidad: {{ Jsonl?.quantity }}</p>
           </div>
         </div>
       </div>

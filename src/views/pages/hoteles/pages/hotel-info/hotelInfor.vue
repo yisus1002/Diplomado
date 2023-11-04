@@ -151,6 +151,10 @@ export default {
       };
       return HabitacionService.getHabitacionId(this.id)
         .then((res) => {
+          res.data.map((ele)=>{
+            /* if(ele.)
+            console.log(ele); */
+          })
           const countHabitacionesByType = {};
           const countHabitacionesByAcomodacion = {};
           for (const key in this.habitacionType) {
@@ -160,6 +164,7 @@ export default {
               type: this.habitacionType[key],
             });
           }
+          console.log(countHabitacionesByType);
           for (const key in this.habitacionAcomodacion) {
             countHabitacionesByAcomodacion[key] = this.getCountHabitaciones({
               data: res.data,

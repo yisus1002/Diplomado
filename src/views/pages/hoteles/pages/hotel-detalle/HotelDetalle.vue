@@ -149,8 +149,20 @@ export default {
       this.$router.push('/hotel');
     },
     
-    editHabitacion(habitacion){
+    editHabitacion(habitacion, index){
       console.log(habitacion);
+      let habiAux ={
+        hotel_id: this.HotelJson?.id,
+        room_type_id: habitacion.type.id,
+        accommodation_id: habitacion.accommodation.id,
+        quantity: habitacion.quantity
+      }
+      console.log(habiAux);
+      if(habitacion.id){
+        this.putHabitacion(habitacion.id, habiAux, index);
+      }else{
+        this.alert();
+      }
     },
     confirmRemoveHabitacion(habitacion, index){
       if(!habitacion?.id){
@@ -318,12 +330,12 @@ export default {
           console.error('Error al crear la habitación:', error);
         });
     },
-    putHotel(id, hotel){
+    putHotel(id, hotel, index){
       HotelService.puthotel(id, hotel)
       .then(response => {
         // this.habitacionesJson
         // console.log(response);
-        this.HotelJson=response.data;
+        this.HotelJson[index]=response.data;
         this.alert({mensage:`Hotel actualizado`,icon:'success'});
         this.loadFormu(this.HotelJson)
       })
@@ -333,10 +345,17 @@ export default {
         console.log(error?.response?.data?.message);
       })
     },
-    putHabitacion(id, habitacion){
+    putHabitacion(id, habitacion, index){
       HabitacionService.putHabitacion(id, habitacion)
       .then(response => {
-        this.habitacionesJson=response.data;
+        let obj={
+            id:response.data.id,
+            quantity:response.data.quantity,           
+            accommodation:this.TipoHabitacion[response.data.accommodation_id],
+            type:this.TipoAcomodacion[response.data.room_type_id],
+          }
+        console.log(response);
+        this.habitacionesJson[index] = obj;
         this.alert({mensage:`Habitación actualizada`,icon:'success'});
         // this.loadFormu1(this.habitacionesJson)
       })
